@@ -1,7 +1,7 @@
-# Travel — Epic 01: Каталог и Карта (Frontend)
+# Travel Frontend (API-Ready)
 
-## Запуск:
-```
+## Запуск проекта:
+```bash
 npm install
 npm run dev
 ```
