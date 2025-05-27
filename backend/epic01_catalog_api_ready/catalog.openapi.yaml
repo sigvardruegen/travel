@@ -1,0 +1,122 @@
+
+openapi: 3.1.0
+info:
+  title: Catalog API
+  version: 1.0.0
+paths:
+  /catalog:
+    get:
+      summary: Get list of catalog objects
+      parameters:
+        - in: query
+          name: bbox
+          schema:
+            type: string
+          description: Bounding box for map (e.g. "36.1,54.8,38.5,56.5")
+        - in: query
+          name: region
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: price_min
+          schema:
+            type: integer
+        - in: query
+          name: price_max
+          schema:
+            type: integer
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [popular, price_asc, price_desc, unique]
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+  /filters:
+    get:
+      summary: Get available filters
+      responses:
+        '200':
+          description: Filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filters'
+  /regions:
+    get:
+      summary: Get list of regions
+      responses:
+        '200':
+          description: Regions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Regions'
+
+components:
+  schemas:
+    CatalogList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogItem'
+        total:
+          type: integer
+    CatalogItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        region:
+          type: string
+        type:
+          type: string
+        price:
+          type: integer
+        coords:
+          type: array
+          items:
+            type: number
+        can_book:
+          type: boolean
+    Filters:
+      type: object
+      properties:
+        types:
+          type: array
+          items: { type: string }
+        features:
+          type: array
+          items: { type: string }
+        seasons:
+          type: array
+          items: { type: string }
+        price_range:
+          type: object
+          properties:
+            min: { type: integer }
+            max: { type: integer }
+    Regions:
+      type: array
+      items: { type: string }
