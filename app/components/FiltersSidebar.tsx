@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { FiltersResponse, RegionsResponse } from '../lib/types';
+import { FiltersResponse } from '../lib/types';
 
 export default function FiltersSidebar() {
   const [filters, setFilters] = useState<FiltersResponse | null>(null);
-  const [regions, setRegions] = useState<RegionsResponse | null>(null);
+  const [regions, setRegions] = useState<string[]>([]);
 
   useEffect(() => {
     async function loadData() {
@@ -33,10 +33,10 @@ export default function FiltersSidebar() {
           </div>
         </>
       )}
-      {regions && (
+      {regions.length > 0 && (
         <div>
           <strong>Регионы:</strong>
-          <ul>{Object.keys(regions).map(region => <li key={region}>{region}</li>)}</ul>
+          <ul>{regions.map(region => <li key={region}>{region}</li>)}</ul>
         </div>
       )}
     </aside>
