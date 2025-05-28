@@ -1,0 +1,38 @@
+
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: travel_db
+    restart: always
+    environment:
+      POSTGRES_USER: travel
+      POSTGRES_PASSWORD: travelpass
+      POSTGRES_DB: travel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./epic01_catalog_api
+    container_name: travel_backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./epic01_catalog_api:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build: .
+    container_name: travel_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
