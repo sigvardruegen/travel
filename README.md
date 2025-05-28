@@ -83,6 +83,69 @@ uvicorn main:app --reload --port 8000
 ✔ Ready for integration testing
 
 ---
+## 🚀 Как запустить локально (Mac / Linux)
+
+### 1. Клонируй/распакуй проект
+
+```bash
+cd travel
+```
+
+### 2. Убедись, что ты в корне (где `docker-compose.yml`)
+
+```bash
+ls
+# Должны быть видны:
+# docker-compose.yml, epic01_catalog_api/, app/, package.json
+```
+
+### 3. Запусти проект
+
+```bash
+docker-compose up --build
+```
+
+### 4. Заполни базу мок-данными
+
+```bash
+docker-compose exec backend python epic01_catalog_api/populate_db.py
+```
+
+---
+
+## 🌐 Что откроется в браузере
+
+- [http://localhost:3000](http://localhost:3000) — интерфейс каталога (карта, фильтры, карточки)
+- [http://localhost:8000/docs](http://localhost:8000/docs) — Swagger (документация API)
+- API-прокси: `/api/filters`, `/api/regions`, `/api/catalog?bbox=...`
+
+---
+
+## 🛠 Дополнительно
+
+### Проверка и перезапуск
+
+```bash
+docker-compose down -v
+docker-compose up --build
+```
+
+### Отдельно фронт без Docker
+
+```bash
+cd travel
+npm install
+npm run dev
+```
+
+### Отдельно бэк без Docker
+
+```bash
+cd epic01_catalog_api
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+---
 
 ## 👥 Authors
 
