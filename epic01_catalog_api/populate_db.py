@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # could be conditional. For simplicity, and since main.py handles it on app startup,
     # we can rely on that. However, for a standalone script, explicit creation is safer.
     # Base.metadata.create_all(bind=engine)
-    
+
     print("Attempting to connect to the database to populate data...")
     db = SessionLocal()
     try:

@@ -1,4 +1,3 @@
-
 # Используем официальный Node.js образ
 FROM node:18-alpine
 
@@ -14,9 +13,8 @@ RUN npm install
 # Копируем остальной код
 COPY . .
 
-# Собираем проект
-RUN npm run build
-
-# Запускаем сервер
+# Открываем порт
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+
+# Запускаем dev-сервер
+CMD ["npm", "run", "dev"]

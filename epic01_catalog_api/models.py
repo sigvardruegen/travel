@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 from sqlalchemy import Column, Integer, String, Float, Boolean
 from geoalchemy2 import Geometry
-from .database import Base
+from database import Base
 
 
 # Pydantic models (for API request/response)

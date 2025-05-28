@@ -6,8 +6,8 @@ from geoalchemy2.functions import ST_MakeEnvelope, ST_Intersects
 from geoalchemy2.shape import to_shape # To convert WKBElement to Shapely geometry
 from shapely.geometry import Point # To access x, y from Shapely Point
 
-from .models import FilterOptions, CatalogItem, CatalogList, CatalogItemDB
-from .database import create_db_and_tables, SessionLocal
+from models import FilterOptions, CatalogItem, CatalogList, CatalogItemDB
+from database import create_db_and_tables, SessionLocal
 
 app = FastAPI()
 
@@ -77,7 +77,7 @@ async def get_catalog(
     # Filtering logic
     if region:
         query = query.filter(CatalogItemDB.region == region)
-    
+
     if item_type:
         query = query.filter(CatalogItemDB.type == item_type) # Ensure 'type' column name in DB matches
 
@@ -103,7 +103,7 @@ async def get_catalog(
             if not (-180 <= lon_min <= 180 and -180 <= lon_max <= 180 and \
                     -90 <= lat_min <= 90 and -90 <= lat_max <= 90):
                 raise HTTPException(status_code=400, detail="Invalid bbox coordinate values.")
-            
+
             # Create a Polygon from the bounding box coordinates
             # The SRID 4326 is assumed for input coordinates and the geometry column
             bbox_polygon = ST_MakeEnvelope(lon_min, lat_min, lon_max, lat_max, 4326)
@@ -121,7 +121,7 @@ async def get_catalog(
         query = query.order_by(desc(CatalogItemDB.price))
     elif sort == 'name_asc': # Default
         query = query.order_by(asc(CatalogItemDB.name))
-    
+
     # Pagination logic
     query = query.offset((page - 1) * per_page).limit(per_page)
 
