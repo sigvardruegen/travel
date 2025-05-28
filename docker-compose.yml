@@ -3,13 +3,13 @@ version: '3.9'
 
 services:
   db:
-    image: postgres:15
+    image: postgis/postgis:15-3.4
     container_name: travel_db
     restart: always
     environment:
-      POSTGRES_USER: travel
-      POSTGRES_PASSWORD: travelpass
-      POSTGRES_DB: travel
+      POSTGRES_USER: travel_user
+      POSTGRES_PASSWORD: travel_password
+      POSTGRES_DB: travel_db
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -20,11 +20,13 @@ services:
     container_name: travel_backend
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      - ./epic01_catalog_api:/code
+      - ./epic01_catalog_api:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgresql://travel_user:travel_password@db:5432/travel_db
 
   frontend:
     build: .
