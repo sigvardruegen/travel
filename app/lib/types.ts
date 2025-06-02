@@ -1,11 +1,18 @@
+import 'leaflet/dist/leaflet.css';
+
 export interface CatalogItem {
   id: string;
   name: string;
-  image?: string;
-  location?: string;
+  region: string;
+  type: string;
   price: number;
-  coords: [number, number]; // [lon, lat]
+  coords: {
+    type: 'Point';
+    coordinates: [number, number]; // [lon, lat]
+  };
 }
+
+
 
 export interface FiltersResponse {
   types: string[];

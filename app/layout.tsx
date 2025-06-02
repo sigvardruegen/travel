@@ -1,21 +1,9 @@
+import '../styles/globals.css'; // если у тебя структура styles/
 
-// app/layout.tsx
-import type { Metadata } from 'next';
-import './globals.css'; // Ensure this file exists or remove import
-
-export const metadata: Metadata = {
-  title: 'Travel App',
-  description: 'Find unique places to stay!',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="ru">
+      <body className="h-screen">{children}</body>
     </html>
   );
 }

@@ -1,1 +1,16 @@
 body { font-family: sans-serif; margin: 0; background: #fff; color: #000; }
+
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+html, body, #__next {
+  height: 100%;
+  min-height: 100vh;
+}
