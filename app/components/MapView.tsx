@@ -21,10 +21,10 @@ export default function MapView() {
   }, []);
 
   return (
-    <div className="w-full h-[400px]">
+    <div style={{ width: '100%', height: '400px', border: '1px solid red' }}>
       <div
         ref={mapRef}
-        className="w-full h-full border border-green-500"
+        style={{ width: '100%', height: '100%' }}
       />
     </div>
   );
