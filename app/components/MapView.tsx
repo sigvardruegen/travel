@@ -1,61 +1,33 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { CatalogItem } from '../lib/types';
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useRef } from 'react';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Настройка иконки
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+export default function MapView() {
+  const mapRef = useRef<HTMLDivElement>(null);
 
-type Props = {
-  items: CatalogItem[];
-};
+  useEffect(() => {
+    if (!mapRef.current) return;
 
-function parseCoords(coords: any): [number, number] | null {
-  if (!coords || coords.type !== 'Point' || !Array.isArray(coords.coordinates)) return null;
-  const [lon, lat] = coords.coordinates;
-  if (typeof lat !== 'number' || typeof lon !== 'number') return null;
-  return [lat, lon];
-}
+    // Проверка: нет ли уже карты в DOM
+    if (!mapRef.current.hasChildNodes()) {
+      const map = L.map(mapRef.current).setView([55.75, 37.61], 5);
 
-export default function MapView({ items }: Props) {
-  const defaultCenter: [number, number] = [55.751244, 37.618423];
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+    }
+  }, []);
 
   return (
-    <div className="h-full w-full">
-      <MapContainer
-        center={defaultCenter}
-        zoom={5}
-        style={{ height: '100%', width: '100%' }}
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {items.map((item) => {
-          const coords = parseCoords(item.coords);
-          if (!coords) return null;
-
-          return (
-            <Marker key={item.id} position={coords}>
-              <Popup>
-                <strong>{item.name}</strong>
-                <br />
-                {item.region} — {item.type}
-                <br />
-                {item.price?.toLocaleString()} ₽ / ночь
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
+    <div className="w-full h-[400px]">
+      <div
+        ref={mapRef}
+        className="w-full h-full border border-green-500"
+      />
     </div>
   );
+
+
 }

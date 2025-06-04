@@ -6,7 +6,7 @@ import PropertyCard from '../components/PropertyCard';
 import dynamic from 'next/dynamic';
 import { CatalogItem } from '../lib/types';
 
-const MapView = dynamic(() => import('../components/MapClientOnly'), { ssr: false });
+const MapView = dynamic(() => import('../components/MapView'), { ssr: false });
 
 export default function CatalogPage() {
   const [items, setItems] = useState<CatalogItem[]>([]);
@@ -30,7 +30,9 @@ export default function CatalogPage() {
           <PropertyCard key={item.id} item={item} />
         ))}
       </section>
-      <MapView />
+      <div className="h-[400px]">
+        <MapView items={items} />
+      </div>
     </main>
   );
 }
