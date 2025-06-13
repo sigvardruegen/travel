@@ -21,14 +21,12 @@ export default function CatalogPage() {
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  // При изменении фильтров — сброс
   useEffect(() => {
     setItems([]);
     setPage(1);
     setHasMore(true);
   }, [selectedRegion, selectedTypes, searchQuery, sortOption]);
 
-  // Подгрузка данных с учётом page
   useEffect(() => {
     const params = new URLSearchParams();
     if (selectedRegion) params.append('region', selectedRegion);
@@ -39,27 +37,20 @@ export default function CatalogPage() {
     params.append('page', page.toString());
     params.append('per_page', '12');
 
-    const url = `/api/catalog?${params.toString()}`;
-    console.log('Fetching page:', page, url);
-
-    fetch(url)
+    fetch(`/api/catalog?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data.items || data.items.length === 0) {
           setHasMore(false);
         } else {
-          setItems((prev) =>
-            page === 1 ? data.items : [...prev, ...data.items]
-          );
+          setItems((prev) => (page === 1 ? data.items : [...prev, ...data.items]));
         }
       })
       .catch((err) => console.error('fetch error', err));
   }, [page, selectedRegion, selectedTypes, searchQuery, sortOption]);
 
-  // IntersectionObserver: следит за loaderRef
   useEffect(() => {
     if (!loaderRef.current || !hasMore) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -68,27 +59,30 @@ export default function CatalogPage() {
       },
       { rootMargin: '100px' }
     );
-
     observer.observe(loaderRef.current);
     return () => observer.disconnect();
   }, [loaderRef.current, hasMore]);
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[300px_1fr_500px] h-screen">
-      <FiltersSidebar
-        selectedRegion={selectedRegion}
-        selectedTypes={selectedTypes}
-        searchQuery={searchQuery}
-        sortOption={sortOption}
-        onChange={({ region, types, query, sort }) => {
-          setSelectedRegion(region);
-          setSelectedTypes(types);
-          setSearchQuery(query);
-          setSortOption(sort);
-        }}
-      />
+    <main className="grid grid-cols-[300px_1fr_500px] h-screen">
+      {/* Левая колонка — фильтры */}
+      <aside className="h-screen overflow-y-auto border-r border-gray-200">
+        <FiltersSidebar
+          selectedRegion={selectedRegion}
+          selectedTypes={selectedTypes}
+          searchQuery={searchQuery}
+          sortOption={sortOption}
+          onChange={({ region, types, query, sort }) => {
+            setSelectedRegion(region);
+            setSelectedTypes(types);
+            setSearchQuery(query);
+            setSortOption(sort);
+          }}
+        />
+      </aside>
 
-      <section className="overflow-y-auto p-4 h-full">
+      {/* Центральная колонка — карточки */}
+      <section className="h-screen overflow-y-auto p-4">
         {items.map((item) => (
           <div
             key={item.id}
@@ -108,7 +102,8 @@ export default function CatalogPage() {
         )}
       </section>
 
-      <div className="h-[400px]">
+      {/* Правая колонка — карта */}
+      <div className="sticky top-0 h-screen w-full border-l border-gray-200">
         <MapView
           items={items}
           activeItemId={activeItemId}
