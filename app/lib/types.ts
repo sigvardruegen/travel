@@ -6,10 +6,8 @@ export interface CatalogItem {
   region: string;
   type: string;
   price: number;
-  coords: {
-    type: 'Point';
-    coordinates: [number, number]; // [lon, lat]
-  };
+  // [longitude, latitude]
+  coords: [number, number];
 }
 
 

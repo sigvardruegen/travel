@@ -64,46 +64,48 @@ export default function CatalogPage() {
   }, [loaderRef.current, hasMore]);
 
   return (
-    <main className="grid grid-cols-[300px_1fr_500px] h-screen">
-      {/* Левая колонка — фильтры */}
-      <aside className="h-screen overflow-y-auto border-r border-gray-200">
-        <FiltersSidebar
-          selectedRegion={selectedRegion}
-          selectedTypes={selectedTypes}
-          searchQuery={searchQuery}
-          sortOption={sortOption}
-          onChange={({ region, types, query, sort }) => {
-            setSelectedRegion(region);
-            setSelectedTypes(types);
-            setSearchQuery(query);
-            setSortOption(sort);
-          }}
-        />
-      </aside>
+    <main className="flex flex-row w-full h-screen">
+      <div className="flex flex-row flex-1 overflow-hidden">
+        {/* Фильтры */}
+        <aside className="w-[300px] shrink-0 overflow-y-auto border-r border-gray-200 h-full">
+          <FiltersSidebar
+            selectedRegion={selectedRegion}
+            selectedTypes={selectedTypes}
+            searchQuery={searchQuery}
+            sortOption={sortOption}
+            onChange={({ region, types, query, sort }) => {
+              setSelectedRegion(region);
+              setSelectedTypes(types);
+              setSearchQuery(query);
+              setSortOption(sort);
+            }}
+          />
+        </aside>
 
-      {/* Центральная колонка — карточки */}
-      <section className="h-screen overflow-y-auto p-4">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            onMouseEnter={() => setActiveItemId(item.id)}
-            onMouseLeave={() => setActiveItemId(null)}
-          >
-            <PropertyCard item={item} active={activeItemId === item.id} />
-          </div>
-        ))}
-        {hasMore && (
-          <div
-            ref={loaderRef}
-            className="h-10 flex items-center justify-center text-sm text-gray-400"
-          >
-            Загрузка ещё...
-          </div>
-        )}
-      </section>
+        {/* Список карточек */}
+        <section className="flex-1 h-full overflow-y-auto p-4">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              onMouseEnter={() => setActiveItemId(item.id)}
+              onMouseLeave={() => setActiveItemId(null)}
+            >
+              <PropertyCard item={item} active={activeItemId === item.id} />
+            </div>
+          ))}
+          {hasMore && (
+            <div
+              ref={loaderRef}
+              className="h-10 flex items-center justify-center text-sm text-gray-400"
+            >
+              Загрузка ещё...
+            </div>
+          )}
+        </section>
+      </div>
 
-      {/* Правая колонка — карта */}
-      <div className="sticky top-0 h-screen w-full border-l border-gray-200">
+      {/* Карта */}
+      <div className="hidden lg:block w-1/3 min-w-[400px] h-screen sticky top-0 border-l border-gray-200 flex-shrink-0">
         <MapView
           items={items}
           activeItemId={activeItemId}

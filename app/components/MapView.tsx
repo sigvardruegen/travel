@@ -71,11 +71,8 @@ export default function MapView({ items, activeItemId, onMarkerHover }: Props) {
   }, [items, activeItemId, onMarkerHover]);
 
   return (
-    <div style={{ width: '100%', height: '400px', border: '1px solid red' }}>
-      <div
-        ref={mapRef}
-        style={{ width: '100%', height: '100%' }}
-      />
+    <div className="h-full w-full">
+      <div ref={mapRef} className="h-full w-full" />
     </div>
   );
 }
