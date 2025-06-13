@@ -105,7 +105,7 @@ export default function CatalogPage() {
       </div>
 
       {/* Карта */}
-      <div className="hidden lg:block w-1/3 min-w-[400px] h-screen sticky top-0 border-l border-gray-200 flex-shrink-0">
+      <div className="w-[500px] min-w-[400px] h-screen sticky top-0 border-l border-gray-200 flex-shrink-0">
         <MapView
           items={items}
           activeItemId={activeItemId}
